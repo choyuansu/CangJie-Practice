@@ -1,0 +1,140 @@
+<head>
+    <meta charset="UTF-8">
+    <title>自然大新倉頡常用詞練習</title>
+    <meta name="description" content="自然大新倉頡常用詞練習" />
+    <meta name="author" content="choyuansu" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="js13kpwa.webmanifest" />
+    <script src="./newcj.js"></script>
+    <script src="./common_terms.js"></script>
+</head>
+<body>
+    <h1>自然大新倉頡常用詞練習</h1>
+    <h2>民國110年新聞媒體詞頻表</h2>
+    <button onclick="toggleOptionsDisplay()">選項</button>
+    <br>
+    <br>
+    <div id="options" style="display: none;">
+        <input type="checkbox" id="showHint" name="showHint" value="showHint" onchange="showHint()">
+        <label for="showHint">Show hint</label><br>
+        <input type="checkbox" id="shuffle" name="shuffle" value="shuffle" onchange="shuffle()">
+        <label for="shuffle">Shuffle</label><br>
+        <input type="number" id="begin" name="begin" min="1" max="557086" value="1" onchange="updateRange()">～
+        <input type="number" id="end" name="end" min="1" max="557086" value="557086" onchange="updateRange()">
+    </div>
+    <hr>
+    <br>
+    <input id="input" type="text" oninput="checkAnswer(this.value)" />
+    <br>
+    <br>
+    <div id="prompt"></div>
+    <div id="hint"></div>
+</body>
+<script>
+    var termIndex = 0;
+    let permutation = Array.from({ length: 557086 }, (_, i) => i);
+    console.log(permutation);
+ 
+
+    function updatePrompt() {
+        document.getElementById("prompt").innerText = commonTerms[permutation[termIndex]];
+    }
+
+    function updateHint() {
+        hintHtml = "";
+        for(var char of commonTerms[permutation[termIndex]]) {
+            if(char in newcjTable) {
+                resultHtml = `<b>${char}</b><hr>${newcjTable[char].join("<br>")}`;
+                hintHtml += '<div class="result">' + resultHtml + "</div>"
+            }
+        }
+        document.getElementById("hint").innerHTML = hintHtml;
+    }
+
+    function checkAnswer(answer) {
+        if (answer == document.getElementById("prompt").innerText) {
+            updatePrompt();
+            updateHint();
+            termIndex++;
+           document.getElementById("input").value = "";
+        }
+    }
+
+    function toggleOptionsDisplay() {
+        const options = document.getElementById("options");
+        options.style.display = options.style.display === "none" ? "block" : "none";
+    }
+
+    function shuffle() {
+        if (document.getElementById("shuffle").checked) {
+            permutation.sort(() => Math.random() - 0.5);
+        }
+        else {
+            permutation = Array.from({ length: 557086 }, (_, i) => i + 1);
+        }
+    }
+
+    function showHint() {
+        const hint = document.getElementById("hint");
+        hint.style.display = hint.style.display === "none" ? "block" : "none";
+    }
+
+    function updateRange() {
+        const begin = document.getElementById("begin");
+        const end = document.getElementById("end");
+
+        
+    }
+
+    window.onload = () => {
+        updatePrompt();
+        updateHint();
+        termIndex++;
+        document.getElementById("input").value = "";
+        document.getElementById("hint").style.display = "block";
+        document.getElementById("showHint").checked = "true";
+    };
+</script>
+<style>
+    html, body {
+        max-width: 100%;
+        height: 100%;
+        text-align: center;
+        overflow-x: hidden;
+        margin: 0;
+    }
+
+    h1 {
+        margin: 1em;
+    }
+
+    #input {
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    #results {
+        text-align: left;
+    }
+    
+    .row {
+        vertical-align: middle;
+    }
+    
+    #prompt {
+        font-size: 2em;
+    }
+
+    .result {
+        width: 4em;
+        border: 2px black solid;
+        margin: .5em;
+        padding: .8em;
+        border-radius: .5em;
+        display: inline-block;
+        vertical-align: top;
+        text-align: left;
+    }
+</style>
