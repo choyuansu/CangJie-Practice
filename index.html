@@ -1,7 +1,7 @@
 <head>
     <meta charset="UTF-8">
-    <title>自然大新倉頡常用詞練習</title>
-    <meta name="description" content="自然大新倉頡常用詞練習" />
+    <title>自由大新倉頡常用詞練習</title>
+    <meta name="description" content="自由大新倉頡常用詞練習" />
     <meta name="author" content="choyuansu" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="favicon.ico" />
@@ -11,16 +11,16 @@
 </head>
 
 <body>
-    <h1>自然大新倉頡常用詞練習</h1>
+    <h1>自由大新倉頡常用詞練習</h1>
     <h2>民國110年新聞媒體詞頻表</h2>
     <button onclick="toggleOptionsDisplay()">選項</button>
     <br>
     <br>
     <div id="options" style="display: none;">
         <input type="checkbox" id="showHint" name="showHint" value="showHint" onchange="showHint()">
-        <label for="showHint">Show hint</label><br>
+        <label for="showHint">顯示題示 (快捷鍵：Esc)</label><br>
         <input type="checkbox" id="shuffle" name="shuffle" value="shuffle" onchange="updatePermutation()">
-        <label for="shuffle">Shuffle</label><br>
+        <label for="shuffle">隨機順序</label><br>
         <input type="number" id="begin" name="begin" min="1" max="557086" value="1" onchange="updatePermutation()">～
         <input type="number" id="end" name="end" min="1" max="557086" value="557086" onchange="updatePermutation()">
     </div>
