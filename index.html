@@ -5,11 +5,11 @@
     <meta name="author" content="choyuansu" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="favicon.ico" />
-    <link rel="stylesheet" href="style.css" />
     <link rel="manifest" href="js13kpwa.webmanifest" />
     <script src="./newcj.js"></script>
     <script src="./common_terms.js"></script>
 </head>
+
 <body>
     <h1>自然大新倉頡常用詞練習</h1>
     <h2>民國110年新聞媒體詞頻表</h2>
@@ -19,10 +19,10 @@
     <div id="options" style="display: none;">
         <input type="checkbox" id="showHint" name="showHint" value="showHint" onchange="showHint()">
         <label for="showHint">Show hint</label><br>
-        <input type="checkbox" id="shuffle" name="shuffle" value="shuffle" onchange="shuffle()">
+        <input type="checkbox" id="shuffle" name="shuffle" value="shuffle" onchange="updatePermutation()">
         <label for="shuffle">Shuffle</label><br>
-        <input type="number" id="begin" name="begin" min="1" max="557086" value="1" onchange="updateRange()">～
-        <input type="number" id="end" name="end" min="1" max="557086" value="557086" onchange="updateRange()">
+        <input type="number" id="begin" name="begin" min="1" max="557086" value="1" onchange="updatePermutation()">～
+        <input type="number" id="end" name="end" min="1" max="557086" value="557086" onchange="updatePermutation()">
     </div>
     <hr>
     <br>
@@ -35,17 +35,17 @@
 <script>
     var termIndex = 0;
     let permutation = Array.from({ length: 557086 }, (_, i) => i);
-    console.log(permutation);
- 
 
     function updatePrompt() {
-        document.getElementById("prompt").innerText = commonTerms[permutation[termIndex]];
+        const begin = parseInt(document.getElementById("begin").value);
+        document.getElementById("prompt").innerText = (termIndex + 1).toString() + '. ' + commonTerms[permutation[termIndex + begin - 1]];
     }
 
     function updateHint() {
         hintHtml = "";
-        for(var char of commonTerms[permutation[termIndex]]) {
-            if(char in newcjTable) {
+        const begin = parseInt(document.getElementById("begin").value);
+        for (var char of commonTerms[permutation[termIndex + begin - 1]]) {
+            if (char in newcjTable) {
                 resultHtml = `<b>${char}</b><hr>${newcjTable[char].join("<br>")}`;
                 hintHtml += '<div class="result">' + resultHtml + "</div>"
             }
@@ -54,11 +54,16 @@
     }
 
     function checkAnswer(answer) {
-        if (answer == document.getElementById("prompt").innerText) {
+        if (answer == document.getElementById("prompt").innerText.split(" ")[1]) {
+            if (termIndex == document.getElementById("end").value) {
+                document.getElementById("prompt").innerText = "恭喜完成所有題目！";
+                document.getElementById("hint").innerHTML = "";
+                return;
+            }
             updatePrompt();
             updateHint();
             termIndex++;
-           document.getElementById("input").value = "";
+            document.getElementById("input").value = "";
         }
     }
 
@@ -68,24 +73,39 @@
     }
 
     function shuffle() {
+        console.log("shuffle");
         if (document.getElementById("shuffle").checked) {
             permutation.sort(() => Math.random() - 0.5);
         }
         else {
-            permutation = Array.from({ length: 557086 }, (_, i) => i + 1);
+            const begin = parseInt(document.getElementById("begin").value);
+            const end = document.getElementById("end").value;
+            permutation = Array.from({ length: end - begin + 1 }, (_, i) => i);
+            console.log("begin", begin);
+            console.log("end", end);
         }
+        termIndex = 0;
+        updatePrompt();
+        updateHint();
+        termIndex++;
+    }
+
+    function updatePermutation() {
+        const begin = parseInt(document.getElementById("begin").value);
+        const end = document.getElementById("end").value;
+        permutation = Array.from({ length: end - begin + 1 }, (_, i) => i);
+        if (document.getElementById("shuffle").checked) {
+            permutation.sort(() => Math.random() - 0.5);
+        }
+        termIndex = 0;
+        updatePrompt();
+        updateHint();
+        termIndex++;
     }
 
     function showHint() {
         const hint = document.getElementById("hint");
         hint.style.display = hint.style.display === "none" ? "block" : "none";
-    }
-
-    function updateRange() {
-        const begin = document.getElementById("begin");
-        const end = document.getElementById("end");
-
-        
     }
 
     window.onload = () => {
@@ -95,10 +115,12 @@
         document.getElementById("input").value = "";
         document.getElementById("hint").style.display = "block";
         document.getElementById("showHint").checked = "true";
+        document.getElementById("shuffle").checked = "";
     };
 </script>
 <style>
-    html, body {
+    html,
+    body {
         max-width: 100%;
         height: 100%;
         text-align: center;
@@ -118,11 +140,11 @@
     #results {
         text-align: left;
     }
-    
+
     .row {
         vertical-align: middle;
     }
-    
+
     #prompt {
         font-size: 2em;
     }
