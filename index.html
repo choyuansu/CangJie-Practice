@@ -38,13 +38,13 @@
 
     function updatePrompt() {
         const begin = parseInt(document.getElementById("begin").value);
-        document.getElementById("prompt").innerText = (termIndex + 1).toString() + '. ' + commonTerms[permutation[termIndex + begin - 1]];
+        document.getElementById("prompt").innerText = (termIndex + 1).toString() + '. ' + commonTerms[permutation[termIndex] + begin - 1];
     }
 
     function updateHint() {
         hintHtml = "";
         const begin = parseInt(document.getElementById("begin").value);
-        for (var char of commonTerms[permutation[termIndex + begin - 1]]) {
+        for (var char of commonTerms[permutation[termIndex] + begin - 1]) {
             if (char in newcjTable) {
                 resultHtml = `<b>${char}</b><hr>${newcjTable[char].join("<br>")}`;
                 hintHtml += '<div class="result">' + resultHtml + "</div>"
