@@ -26,7 +26,8 @@
     </div>
     <hr>
     <br>
-    <input id="input" type="text" oninput="checkAnswer(this.value)" />
+    <input id="input" type="text"
+        onkeydown="if (event.keyCode == 13) checkAnswer(this.value); if (event.keyCode == 27) showHint();" />
     <br>
     <br>
     <div id="prompt"></div>
@@ -38,7 +39,9 @@
 
     function updatePrompt() {
         const begin = parseInt(document.getElementById("begin").value);
-        document.getElementById("prompt").innerText = (termIndex + 1).toString() + '. ' + commonTerms[permutation[termIndex] + begin - 1];
+        document.getElementById("prompt").innerText =
+            (permutation[termIndex] + begin).toString()
+            + '. ' + commonTerms[permutation[termIndex] + begin - 1];
     }
 
     function updateHint() {
@@ -46,7 +49,10 @@
         const begin = parseInt(document.getElementById("begin").value);
         for (var char of commonTerms[permutation[termIndex] + begin - 1]) {
             if (char in newcjTable) {
-                resultHtml = `<b>${char}</b><hr>${newcjTable[char].join("<br>")}`;
+                resultHtml = `<b>${char}</b><hr>${newcjTable[char].join("<br>")
+                    .replaceAll(';', '；')
+                    .replaceAll(',', '，')
+                    .replaceAll('.', '。')}`;
                 hintHtml += '<div class="result">' + resultHtml + "</div>"
             }
         }
@@ -91,8 +97,16 @@
     }
 
     function updatePermutation() {
-        const begin = parseInt(document.getElementById("begin").value);
-        const end = document.getElementById("end").value;
+        var begin = parseInt(document.getElementById("begin").value);
+        var end = document.getElementById("end").value;
+        if (begin < 1) {
+            document.getElementById("begin").value = 1;
+            begin = 1;
+        }
+        if (end > 557086) {
+            document.getElementById("end").value = 1;
+            end = 1;
+        }
         permutation = Array.from({ length: end - begin + 1 }, (_, i) => i);
         if (document.getElementById("shuffle").checked) {
             permutation.sort(() => Math.random() - 0.5);
