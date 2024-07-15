@@ -84,8 +84,8 @@
             begin = 1;
         }
         if (end > 557086) {
-            document.getElementById("end").value = 1;
-            end = 1;
+            document.getElementById("end").value = 557086;
+            end = 557086;
         }
         permutation = Array.from({ length: end - begin + 1 }, (_, i) => i);
         if (document.getElementById("shuffle").checked) {
