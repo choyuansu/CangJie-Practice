@@ -14,8 +14,6 @@
     <h1>自由大新倉頡常用詞練習</h1>
     <h2>民國110年新聞媒體詞頻表</h2>
     <button onclick="toggleOptionsDisplay()">選項</button>
-    <br>
-    <br>
     <div id="options" style="display: none;">
         <input type="checkbox" id="showHint" name="showHint" value="showHint" onchange="showHint()">
         <label for="showHint">顯示題示 (快捷鍵：Esc)</label><br>
@@ -24,14 +22,14 @@
         <input type="number" id="begin" name="begin" min="1" max="557086" value="1" onchange="updatePermutation()">～
         <input type="number" id="end" name="end" min="1" max="557086" value="557086" onchange="updatePermutation()">
     </div>
-    <hr>
-    <br>
-    <input id="input" type="text"
-        onkeydown="if (event.keyCode == 13) checkAnswer(this.value); if (event.keyCode == 27) showHint();" />
-    <br>
-    <br>
-    <div id="prompt"></div>
-    <div id="hint"></div>
+    <div id="content">
+        <input id="input" type="text"
+            onkeydown="if (event.keyCode == 13) checkAnswer(this.value); if (event.keyCode == 27) showHint();" />
+        <br>
+        <br>
+        <div id="prompt"></div>
+        <div id="hint"></div>
+    </div>
 </body>
 <script>
     var termIndex = 0;
@@ -78,24 +76,6 @@
         options.style.display = options.style.display === "none" ? "block" : "none";
     }
 
-    function shuffle() {
-        console.log("shuffle");
-        if (document.getElementById("shuffle").checked) {
-            permutation.sort(() => Math.random() - 0.5);
-        }
-        else {
-            const begin = parseInt(document.getElementById("begin").value);
-            const end = document.getElementById("end").value;
-            permutation = Array.from({ length: end - begin + 1 }, (_, i) => i);
-            console.log("begin", begin);
-            console.log("end", end);
-        }
-        termIndex = 0;
-        updatePrompt();
-        updateHint();
-        termIndex++;
-    }
-
     function updatePermutation() {
         var begin = parseInt(document.getElementById("begin").value);
         var end = document.getElementById("end").value;
@@ -140,6 +120,9 @@
         text-align: center;
         overflow-x: hidden;
         margin: 0;
+        color: white;
+        background-color: #282828;
+        font-family: "Helvetica", "Arial", "LiHei Pro", "黑體-繁", "微軟正黑體", sans-serif;
     }
 
     h1 {
@@ -149,10 +132,20 @@
     #input {
         font-size: 1.5em;
         text-align: center;
+        font-family: "Helvetica", "Arial", "LiHei Pro", "黑體-繁", "微軟正黑體", sans-serif;
+        border-radius: 1em;
+        background-color: #8b8b8b;
+        border-style: none;
+        padding: 0.3em;
+        color: white;
+        outline: none;
     }
 
-    #results {
-        text-align: left;
+    #content {
+        background-color: #3f3f3f;
+        border-radius: 1em;
+        margin: 1em;
+        padding: 1em;
     }
 
     .row {
@@ -164,13 +157,18 @@
     }
 
     .result {
-        width: 4em;
-        border: 2px black solid;
+        width: 5em;
+        border: 2px #121212 none;
         margin: .5em;
         padding: .8em;
         border-radius: .5em;
         display: inline-block;
         vertical-align: top;
+        background-color: #717171;
         text-align: left;
+    }
+
+    b {
+        font-size: 1.2em;
     }
 </style>
