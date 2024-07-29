@@ -4,10 +4,12 @@
     <meta name="description" content="自由大新倉頡常用詞練習" />
     <meta name="author" content="choyuansu" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="favicon.ico" />
-    <link rel="manifest" href="js13kpwa.webmanifest" />
-    <script src="./newcj.js"></script>
-    <script src="./common_terms.js"></script>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" href="/CangJie-Practice/favicon.ico" />
+    <link rel="manifest" href="/CangJie-Practice/manifest.json" />
+    <script src="/CangJie-Practice/newcj.js"></script>
+    <script src="/CangJie-Practice/common_terms.js"></script>
+    <script src="/CangJie-Practice/serviceworker.js"></script>
 </head>
 
 <body>
@@ -32,6 +34,10 @@
     </div>
 </body>
 <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register("/CangJie-Practice/serviceworker.js", { scope: "/CangJie-Practice/" });
+    }
+
     var termIndex = 0;
     let permutation = Array.from({ length: 557086 }, (_, i) => i);
 
