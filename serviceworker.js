@@ -1,3 +1,5 @@
+const cacheName = "CangJie-Practice-v1";
+
 self.addEventListener("install", (e) => {
     console.log("[Service Worker] Install");
     e.waitUntil(
